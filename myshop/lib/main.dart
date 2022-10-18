@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'ui/products/products_manager.dart';
-import 'ui/products/product_detail_screen.dart';
-import 'ui/products/product_overview_screen.dart';
-import 'ui/products/user_products_screen.dart';
-import 'ui/cart/cart_screen.dart';
-import 'ui/orders/orders_screen.dart';
-import 'ui/screens.dart';
+import 'package:myshop/ui/orders/orders_screen.dart';
+import 'package:myshop/ui/products/edit_product_screen.dart';
+import 'package:myshop/ui/products/user_products_screen.dart';
 import 'package:provider/provider.dart';
+import 'ui/screens.dart';
+
+// import 'ui/products/product_detail_screen.dart';
+// import 'ui/products/products_manager.dart';
+// import 'ui/products/product_overview_screen.dart';
+// import 'ui/products/user_products_screen.dart';
+// import 'ui/cart/cart_screen.dart';
+// import 'ui/orders/orders_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,61 +19,60 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-          ChangeNotifierProvider(
-            create: (ctx) => CartManager(),
-          ),
-          ChangeNotifierProvider(
-            create: (ctx) => OrdersManager(),
-            ),
+        ChangeNotifierProvider(
+          create: (ctx) => ProductsManager(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => CartManager(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => OrdersManager(),
+        ),
       ],
       child: MaterialApp(
-      title: 'My Shop',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Lato',
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.purple,
-        ).copyWith(
-          secondary: Colors.deepOrange,
-        ),
-        primarySwatch: Colors.green,
-      ),
-      home: const ProductsOverviewScreen(),
-      routes: {
-        CartScreen.routeName:
-          (ctx) => const CartScreen(),
-        OrdersScreen.routeName:
-          (ctx) => const OrdersScreen(),
-        UserProductsScreen.routeName:
-          (ctx) => const UserProductsScreen(),
+        title: 'My Shop',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            fontFamily: 'Lato',
+            colorScheme:
+                ColorScheme.fromSwatch(primarySwatch: Colors.purple).copyWith(
+              secondary: Colors.deepOrange,
+            )),
+        home: const ProductsOverviewScreen(),
+        routes: {
+          CartScreen.routeName: (ctx) => const CartScreen(),
+          OrdersScreen.routeName: (ctx) => const OrdersScreen(),
+          UserProductsScreen.routeName: (ctx) => const UserProductsScreen(),
         },
-      onGenerateRoute: (settings) {
-        if (settings.name == ProductDetailScreen.routeName) {
-          final productId = settings.arguments as String;
-          return MaterialPageRoute(
-            builder: (ctx) {
-              return ProductDetailScreen(
-               ctx.read<ProductsManager>().findById(productId),
-          );
+        onGenerateRoute: (settings) {
+          if (settings.name == ProductDetailScreen.routeName) {
+            final productId = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (ctx) {
+                return ProductDetailScreen(
+                  ctx.read<ProductsManager>().findById(productId),
+                );
+              },
+            );
+          }
+
+          if (settings.name == EditProductScreen.routeName) {
+            final productId = settings.arguments as String?;
+            return MaterialPageRoute(
+              builder: (ctx) {
+                return EditProductScreen(
+                  productId != null ?
+                  ctx.read<ProductsManager>().findById(productId):null,
+                );
+              },
+            );
+          }
+          return null;
         },
-      );
-    }
-      return null;
-      },
       ),
     );
   }
@@ -118,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
-// the App.build method, and use it to set our appbar title.
+        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
@@ -142,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Hello',
+              'You have pushed the button this many times:',
             ),
             Text(
               '$_counter',
