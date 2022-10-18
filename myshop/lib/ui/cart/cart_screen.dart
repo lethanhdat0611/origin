@@ -4,6 +4,7 @@ import 'cart_manager.dart';
 import 'cart_item_card.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
+import '../orders/order_manager.dart';
 
 class CartScreen extends StatelessWidget { 
   static const routeName = '/cart';
@@ -65,14 +66,21 @@ class CartScreen extends StatelessWidget {
       backgroundColor: Theme. of (context).primaryColor,
     ),
       TextButton(
-      onPressed: () {
-        print('An order has been added');
-      },
-      style: TextButton.styleFrom(
-        textStyle: TextStyle(color: Theme.of(context).primaryColor),
-      ),
-      child: const Text('ORDER NOW'),
-      )
+        onPressed: cart.totalAmount <= 0
+        ? null
+        : () {
+          context.read<OrdersManager>().addOrder(
+            cart.products,
+            cart.totalAmount,
+          );
+          cart.clear();
+          },
+          style: TextButton.styleFrom(
+            textStyle:
+            TextStyle(color: Theme.of(context).primaryColor),
+          ),
+        child: const Text('ORDER NOW'),
+        ),
       ],
     ),
     ),
