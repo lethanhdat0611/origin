@@ -99,8 +99,8 @@ class ProductsService extends FirebaseService {
       return false;
     }
   }
-
-  Future<bool> saveFavoriteStatus(Product product) async {
+  
+ Future<bool> saveFavoriteStatus(Product product) async {
     try {
       final url = Uri.parse(
           '$databaseUrl/userFavorites/$userId/${product.id}.json?auth=$token');
@@ -119,4 +119,5 @@ class ProductsService extends FirebaseService {
       return false;
     }
   }
+
 }

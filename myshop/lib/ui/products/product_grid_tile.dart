@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/ui/products/products_manager.dart';
 
 import '../../models/product.dart';
 
@@ -50,7 +51,7 @@ Widget buildGridFooterBar(BuildContext context) {
     ), 
     color: Theme. of (context).colorScheme.secondary, 
     onPressed: () {
-      product.isFavorite = !isFavorite;
+      ctx.read<ProductsManager>().toggleFavoriteStatus(product);
       },
     );
   },
